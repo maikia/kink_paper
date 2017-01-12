@@ -1,0 +1,98 @@
+load_file("stdrun.hoc")
+
+objref st, st1
+
+tstart = 0
+tstop = 30 //400
+dt = 0.01/1
+steps_per_ms = 1/dt
+
+// Create the neuron
+rm = 30000
+v_init    = -70
+celsius   = 37
+Ek = -80   //-90 might affect the axon spike phase slope value low, and less noisy, increase to be -85?
+           //   maybe not, still need check
+Ena = 60
+ra = 150  //the larger, the soma kink slope large is
+c_m = 0.75 // the optimal value, both increase and decrease will decrease slope value
+           //however, small C value will have high dv/dt value
+xn = 1
+gna = 8000 //7500
+gk = 1600 //1800
+create soma, axon
+
+gkm = .3// .3   //.3~ 0.5
+gca = .3//.3   //.3~ 0.5
+gkca = .3// 3  //.3~ 0.5
+
+gca_soma = gca
+gkm_soma = gkm
+gkca_soma = gkca
+                
+soma {
+    L=30         //increase size make stronger kink
+    nseg=L/5
+    diam = 20
+}
+
+axon {
+    L=50
+    nseg=L/5
+    diam=1
+}
+
+soma connect axon(0), 1
+
+proc init_cell() {
+      forall {
+              insert pas
+              Ra = ra
+              cm = c_m
+              g_pas = 1/rm
+              e_pas = v_init
+              }
+              
+            axon cm=c_m*0.75
+            soma cm=c_m
+
+      forall insert na             
+             soma.gbar_na = 0.1*gna  //750 //gna/8 // increase this will increase dv/dt amplitude, but weak kink value
+             axon.gbar_na = gna //7500
+            
+      
+      forall insert kv
+             soma.gbar_kv = gk/5 //250 //gk/2 // increase this will increase dv/dt amplitude and weak biphase
+             axon.gbar_kv = gk
+             
+           forall {
+            insert km    gbar_km  = 0 //gkm
+	    insert kca   gbar_kca = 0 //gkca
+    	    insert ca    gbar_ca = 0 //gca
+    	    insert cad
+             }
+             axon gbar_km=0
+             
+             axon gbar_kca=0
+             
+             axon gbar_ca=0
+              
+      forall if(ismembrane("ca_ion")) {
+               eca = 140
+               ion_style("ca_ion",0,1,0,0,0)
+               vshift_ca = 0
+  }
+             
+   
+      forall if(ismembrane("k_ion")) ek = Ek
+      forall if(ismembrane("na_ion")) {
+                ena = Ena
+                // seems to be necessary for 3d cells to shift Na kinetics -5 mV
+                vshift_na = -6 //-5
+                                      }
+      forall insert extracellular
+   finitialize(v_init)
+    fcurrent()
+  frecord_init()    
+}      
+
