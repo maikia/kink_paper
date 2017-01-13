@@ -196,7 +196,7 @@ extern void _cvode_abstol( Symbol**, double*, int);
   hoc_register_prop_size(_mechtype, 11, 4);
  	hoc_register_cvode(_mechtype, _ode_count, 0, 0, 0);
  	hoc_register_var(hoc_scdoub, hoc_vdoub, hoc_intfunc);
- 	ivoc_help("help ?1 iAHP2 /home/maja/maja/phdProject/Brette Lab/Model DB/McCormickEtAl2007YuEtAl2008/morpho/x86_64/iahp2.mod\n");
+ 	ivoc_help("help ?1 iAHP2 /home/maja/maja/phdProject/Brette Lab/Model DB/kink_paper/src/morphology/x86_64/iahp2.mod\n");
  hoc_register_limits(_mechtype, _hoc_parm_limits);
  hoc_register_units(_mechtype, _hoc_parm_units);
  }

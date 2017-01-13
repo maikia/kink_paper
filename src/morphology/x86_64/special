@@ -10,4 +10,4 @@ if test "" = "yes" ; then
 else
 	NRNIV="${NRNBIN}nrniv"
 fi
-"${NRNIV}" -dll "/home/maja/maja/phdProject/Brette Lab/Model DB/McCormickEtAl2007YuEtAl2008/morpho/x86_64/.libs/libnrnmech.so" "$@"
+"${NRNIV}" -dll "/home/maja/maja/phdProject/Brette Lab/Model DB/kink_paper/src/morphology/x86_64/.libs/libnrnmech.so" "$@"
