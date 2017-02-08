@@ -1,1 +1,3 @@
 src/morphology/x86_64
+**/.ipynb_checkpoints/
+*.pyc
